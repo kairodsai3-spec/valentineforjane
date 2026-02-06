@@ -11,7 +11,7 @@ body{
     margin:0;
     width:100%;
     height:100dvh;
-    font-family: Arial, sans-serif;
+    font-family:Arial,sans-serif;
     background:linear-gradient(135deg,#ff9a9e,#fad0c4);
     display:flex;
     justify-content:center;
@@ -19,44 +19,6 @@ body{
     overflow:hidden;
 }
 .hidden{display:none}
-
-/* ===== ซองจดหมาย ===== */
-.envelope-screen{
-    position:absolute;
-    inset:0;
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    align-items:center;
-}
-.envelope{
-    width:180px;
-    height:120px;
-    background:#ff4d6d;
-    border-radius:15px;
-    position:relative;
-    cursor:pointer;
-    animation:bounce 2s infinite;
-}
-.envelope::before{
-    content:"";
-    position:absolute;
-    inset:0;
-    background:#ff758f;
-    clip-path:polygon(0 0,50% 50%,100% 0,100% 100%,0 100%);
-}
-.letter{
-    position:absolute;
-    top:-25px;
-    left:50%;
-    transform:translateX(-50%);
-    font-size:36px;
-}
-@keyframes bounce{
-    0%,100%{transform:translateY(0)}
-    50%{transform:translateY(-10px)}
-}
-.hint{color:white;margin-top:15px}
 
 /* ===== กล่องกลาง ===== */
 .box{
@@ -67,6 +29,55 @@ body{
     max-width:360px;
     text-align:center;
     box-shadow:0 20px 40px rgba(0,0,0,.25);
+}
+
+/* ===== หน้าเปิดซอง ===== */
+.envelope-screen{
+    position:absolute;
+    inset:0;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+}
+.big-envelope{
+    width:180px;
+    height:120px;
+    background:#ff4d6d;
+    border-radius:15px;
+    position:relative;
+    cursor:pointer;
+    animation:bounce 2s infinite;
+}
+.big-envelope::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:#ff758f;
+    clip-path:polygon(0 0,50% 50%,100% 0,100% 100%,0 100%);
+}
+.big-letter{
+    position:absolute;
+    top:-28px;
+    left:50%;
+    transform:translateX(-50%);
+    font-size:36px;
+}
+@keyframes bounce{
+    0%,100%{transform:translateY(0)}
+    50%{transform:translateY(-10px)}
+}
+.hint{color:white;margin-top:15px}
+
+/* ===== ซองเล็กหน้าใส่รหัส ===== */
+.mini-envelope{
+    font-size:48px;
+    margin:10px auto 5px;
+    animation:float 2s ease-in-out infinite;
+}
+@keyframes float{
+    0%,100%{transform:translateY(0)}
+    50%{transform:translateY(-8px)}
 }
 
 /* ===== คีย์แพด ===== */
@@ -160,18 +171,22 @@ button:hover{transform:scale(1.05)}
 
 <body>
 
-<!-- ✉️ เปิดซอง -->
-<div class="envelope-screen" id="envelope">
-    <div class="envelope" onclick="openEnvelope()">
-        <div class="letter">💌</div>
+<!-- ✉️ หน้าเปิดซอง -->
+<div class="envelope-screen" id="envelopeScreen">
+    <div class="big-envelope" onclick="openEnvelope()">
+        <div class="big-letter">💌</div>
     </div>
     <div class="hint">แตะซองจดหมายเพื่อเปิด</div>
 </div>
 
-<!-- 🔐 ใส่รหัส -->
+<!-- 🔐 หน้าใส่รหัส -->
 <div class="box hidden" id="lock">
     <h2>ใส่รหัสหัวใจ 💕</h2>
+
+    <div class="mini-envelope">💌</div>
+
     <div class="display" id="display">____</div>
+
     <div class="keypad">
         <button onclick="press(1)">1</button>
         <button onclick="press(2)">2</button>
@@ -188,7 +203,7 @@ button:hover{transform:scale(1.05)}
     </div>
 </div>
 
-<!-- 💖 เซอร์ไพรส์ -->
+<!-- 💖 หน้าเซอร์ไพรส์ -->
 <div class="box hidden" id="love">
     <h2>Happy Valentine 💖</h2>
 
@@ -216,7 +231,7 @@ button:hover{transform:scale(1.05)}
 <audio id="music" src="song.mp3" loop></audio>
 
 <script>
-const password="1402"; // เปลี่ยนรหัสตรงนี้
+const password="1402";
 let input="";
 const slides=document.querySelectorAll(".slide");
 const texts=[
@@ -234,7 +249,7 @@ const texts=[
 let index=0;
 
 function openEnvelope(){
-    envelope.classList.add("hidden");
+    envelopeScreen.classList.add("hidden");
     lock.classList.remove("hidden");
 }
 function press(n){
