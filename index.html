@@ -11,7 +11,6 @@
 <title>For You ❤️</title>
 
 <style>
-/* ================= SAFE AREA ROOT ================= */
 :root{
     --safe-top: env(safe-area-inset-top, constant(safe-area-inset-top));
     --safe-bottom: env(safe-area-inset-bottom, constant(safe-area-inset-bottom));
@@ -19,15 +18,9 @@
     --safe-right: env(safe-area-inset-right, constant(safe-area-inset-right));
 }
 
-/* ================= RESET ================= */
 *{box-sizing:border-box}
-html,body{
-    width:100%;
-    height:100%;
-    margin:0;
-}
+html,body{width:100%;height:100%;margin:0}
 
-/* ================= BODY ================= */
 body{
     min-height:100dvh;
     min-height:-webkit-fill-available;
@@ -37,22 +30,11 @@ body{
     justify-content:center;
     align-items:center;
     overflow:hidden;
-
-    padding:
-        var(--safe-top)
-        var(--safe-right)
-        var(--safe-bottom)
-        var(--safe-left);
+    padding:var(--safe-top) var(--safe-right) var(--safe-bottom) var(--safe-left);
 }
 
-/* ================= HIDDEN ================= */
-.hidden{
-    display:none;
-    opacity:0;
-    pointer-events:none;
-}
+.hidden{display:none;opacity:0;pointer-events:none}
 
-/* ================= CARD BOX ================= */
 .box{
     background:white;
     padding:25px;
@@ -66,7 +48,7 @@ body{
     margin-bottom:calc(var(--safe-bottom) + 10px);
 }
 
-/* ================= ENVELOPE SCREEN ================= */
+/* ===== ENVELOPE ===== */
 .envelope-screen{
     position:fixed;
     inset:0;
@@ -75,7 +57,6 @@ body{
     justify-content:center;
     align-items:center;
     z-index:1;
-    transition:opacity .5s ease;
 }
 .big-envelope{
     width:180px;
@@ -104,13 +85,9 @@ body{
     0%,100%{transform:translateY(0)}
     50%{transform:translateY(-12px)}
 }
-.hint{
-    margin-top:15px;
-    color:white;
-    font-size:16px;
-}
+.hint{margin-top:15px;color:white}
 
-/* ================= MINI ENVELOPE ================= */
+/* ===== LOCK ===== */
 .mini-envelope{
     font-size:48px;
     margin:10px auto;
@@ -121,12 +98,12 @@ body{
     50%{transform:translateY(-8px)}
 }
 
-/* ================= KEYPAD ================= */
 .display{
-    font-size:28px;
-    letter-spacing:10px;
+    font-size:26px;
+    letter-spacing:6px;
     margin:15px 0;
 }
+
 .keypad{
     display:grid;
     grid-template-columns:repeat(3,1fr);
@@ -139,11 +116,10 @@ button{
     border-radius:15px;
     background:#ff4d6d;
     color:white;
-    cursor:pointer;
 }
 button:active{transform:scale(.95)}
 
-/* ================= GALLERY ================= */
+/* ===== LOVE ===== */
 .gallery{
     position:relative;
     width:260px;
@@ -163,17 +139,10 @@ button:active{transform:scale(.95)}
     transform:scale(1.1);
     transition:1.5s;
 }
-.slide.active{
-    opacity:1;
-    transform:scale(1);
-}
-.text-love{
-    margin-top:10px;
-    color:#ff4d6d;
-    font-size:18px;
-}
+.slide.active{opacity:1;transform:scale(1)}
 
-/* ================= HEART BUTTON ================= */
+.text-love{margin-top:10px;color:#ff4d6d;font-size:18px}
+
 .heart-btn{
     margin-top:20px;
     padding:15px 25px;
@@ -182,10 +151,8 @@ button:active{transform:scale(.95)}
     border:none;
     background:linear-gradient(135deg,#ff4d6d,#ff85a1);
     color:white;
-    box-shadow:0 10px 25px rgba(255,77,109,.5);
 }
 
-/* ================= FINAL TEXT ================= */
 .final{
     margin-top:20px;
     font-size:22px;
@@ -197,7 +164,7 @@ button:active{transform:scale(.95)}
     to{transform:scale(1);opacity:1}
 }
 
-/* ================= FLOATING HEARTS ================= */
+/* ===== HEART FLOAT ===== */
 .heart{
     position:fixed;
     bottom:var(--safe-bottom);
@@ -214,7 +181,6 @@ button:active{transform:scale(.95)}
 
 <body>
 
-<!-- ✉️ OPEN ENVELOPE -->
 <div class="envelope-screen" id="envelopeScreen">
     <div class="big-envelope" onclick="openEnvelope()">
         <div class="big-letter">💌</div>
@@ -222,7 +188,6 @@ button:active{transform:scale(.95)}
     <div class="hint">แตะซองจดหมายเพื่อเปิด</div>
 </div>
 
-<!-- 🔐 LOCK -->
 <div class="box hidden" id="lock">
     <h2>ใส่รหัสหัวใจ 💕</h2>
     <div class="mini-envelope">💌</div>
@@ -244,7 +209,6 @@ button:active{transform:scale(.95)}
     </div>
 </div>
 
-<!-- 💖 LOVE -->
 <div class="box hidden" id="love">
     <h2>Happy Valentine 💖</h2>
 
@@ -272,10 +236,12 @@ button:active{transform:scale(.95)}
 <audio id="music" src="song.mp3" loop></audio>
 
 <script>
-const password="260567";
-let input="";
-const slides=document.querySelectorAll(".slide");
-const texts=[
+const password = "140225";   // 🔐 รหัส 6 หลัก
+const maxLen = 6;
+
+let input = "";
+const slides = document.querySelectorAll(".slide");
+const texts = [
 "วันแรกที่เราเจอกัน ❤️",
 "โมเมนต์ที่ไม่เคยลืม",
 "ยิ้มแบบนี้ใจละลาย",
@@ -287,52 +253,80 @@ const texts=[
 "จับมือกันไปนานๆ",
 "รักนะครับ 💕"
 ];
-let index=0;
+let index = 0;
+
+/* ===== iPhone VIBE ===== */
+function vibrate(ms = 10){
+    if(navigator.vibrate){
+        navigator.vibrate(ms);
+    }
+}
 
 function openEnvelope(){
     envelopeScreen.classList.add("hidden");
     lock.classList.remove("hidden");
 }
+
 function press(n){
-    if(input.length<4){input+=n;update()}
+    if(input.length < maxLen){
+        vibrate(10);              // 📳 สั่นเบา ๆ
+        input += n;
+        update();
+
+        // ✅ ครบ 6 ตัว เข้าอัตโนมัติ
+        if(input.length === maxLen){
+            setTimeout(check,150);
+        }
+    }
 }
+
 function del(){
-    input=input.slice(0,-1);update()
+    vibrate(8);
+    input = input.slice(0,-1);
+    update();
 }
+
 function update(){
-    display.textContent=input.padEnd(6,"_")
+    display.textContent = input.padEnd(maxLen,"_");
 }
+
 function check(){
-    if(input===password){
+    if(input === password){
+        vibrate([20,30,20]);      // 📳 สั่นยืนยัน
         lock.classList.add("hidden");
         love.classList.remove("hidden");
         music.play();
         startSlide();
         hearts();
     }else{
+        vibrate([40,30,40]);      // 📳 สั่นเตือน
         alert("รหัสไม่ถูกนะ 😳");
-        input="";update();
+        input="";
+        update();
     }
 }
+
 function startSlide(){
-    text.textContent=texts[0];
+    text.textContent = texts[0];
     setInterval(()=>{
         slides[index].classList.remove("active");
-        index=(index+1)%slides.length;
+        index = (index + 1) % slides.length;
         slides[index].classList.add("active");
-        text.textContent=texts[index];
+        text.textContent = texts[index];
     },3000);
 }
+
 function hearts(){
     setInterval(()=>{
-        const h=document.createElement("div");
-        h.className="heart";
-        h.innerHTML="❤️";
-        h.style.left=Math.random()*100+"vw";
+        const h = document.createElement("div");
+        h.className = "heart";
+        h.innerHTML = "❤️";
+        h.style.left = Math.random()*100+"vw";
         document.body.appendChild(h);
         setTimeout(()=>h.remove(),4000);
     },500);
 }
+
 function finalLove(){
     final.classList.remove("hidden");
 }
@@ -340,6 +334,3 @@ function finalLove(){
 
 </body>
 </html>
-
-
-
