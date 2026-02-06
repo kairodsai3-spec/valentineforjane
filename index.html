@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>For You ❤️</title>
 
 <style>
@@ -33,65 +33,70 @@ body{
 
 /* ===== ซอง ===== */
 .envelope{
-  width:200px;
-  height:130px;
-  background:#ff6f91;
-  margin:0 auto 20px;
-  border-radius:10px;
-  position:relative;
+  font-size:90px;
+  cursor:pointer;
+  animation:bounce 1.2s infinite;
 }
-.envelope::before{
-  content:"";
-  position:absolute;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-  background:linear-gradient(to bottom right, transparent 50%, #ff4f75 50%);
-  clip-path:polygon(0 0,100% 0,50% 55%);
+@keyframes bounce{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-10px)}
 }
-.open-btn{
-  margin-top:10px;
-  padding:10px 20px;
+
+button{
+  margin-top:15px;
+  padding:12px 22px;
   border:none;
   border-radius:20px;
-  background:#ff4f75;
+  background:#ff5e78;
   color:#fff;
   font-size:16px;
 }
 
 /* ===== keypad ===== */
+.display{
+  font-size:24px;
+  letter-spacing:8px;
+  margin:12px 0;
+}
 .keypad{
   display:grid;
   grid-template-columns:repeat(3,1fr);
   gap:10px;
-  margin-top:15px;
 }
 .keypad button{
   padding:15px;
   font-size:18px;
-  border:none;
-  border-radius:15px;
+  border-radius:14px;
   background:#ff6f91;
-  color:#fff;
 }
-.display{
-  font-size:22px;
-  letter-spacing:8px;
-  margin:10px 0;
+
+/* ===== popup ===== */
+.popup{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.4);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  z-index:10;
+}
+.popup-box{
+  background:#fff;
+  padding:25px;
+  border-radius:22px;
+  width:80%;
+  text-align:center;
 }
 
 /* ===== หัวใจลอย ===== */
 .heart{
-  position:absolute;
+  position:fixed;
   bottom:-20px;
-  color:#ff4f75;
-  animation:float 5s linear forwards;
   font-size:20px;
+  animation:floatUp 4s linear forwards;
 }
-@keyframes float{
-  from{transform:translateY(0);opacity:1}
-  to{transform:translateY(-110vh);opacity:0}
+@keyframes floatUp{
+  to{transform:translateY(-120vh);opacity:0}
 }
 </style>
 </head>
@@ -99,14 +104,14 @@ body{
 <body>
 
 <!-- หน้าเปิดซอง -->
-<div class="box" id="envelopeBox">
+<div class="box" id="envelopeScreen">
   <h2>มีอะไรจะบอก 💌</h2>
-  <div class="envelope"></div>
-  <button class="open-btn" onclick="openEnvelope()">เปิดซอง</button>
+  <div class="envelope" onclick="openEnvelope()">💌</div>
+  <button onclick="openEnvelope()">เปิดซอง</button>
 </div>
 
 <!-- หน้าใส่รหัส -->
-<div class="box hidden" id="lockBox">
+<div class="box hidden" id="pinScreen">
   <h2>ใส่รหัสหัวใจ ❤️</h2>
   <div class="display" id="display"></div>
   <div class="keypad">
@@ -121,60 +126,81 @@ body{
     <button onclick="press(9)">9</button>
     <button onclick="back()">⌫</button>
     <button onclick="press(0)">0</button>
-    <button onclick="check()">OK</button>
+    <button onclick="checkPin()">OK</button>
   </div>
 </div>
 
 <!-- หน้าเซอร์ไพรส์ -->
-<div class="box hidden" id="loveBox">
+<div class="box hidden" id="loveScreen">
   <h1>รักนะ ❤️</h1>
-  <p>ขอบคุณที่เข้ามาในชีวิตเรา</p>
+  <p>ขอบคุณที่อยู่ด้วยกันเสมอ</p>
+</div>
+
+<!-- popup แจ้งเตือน -->
+<div class="popup hidden" id="popup">
+  <div class="popup-box">
+    <p id="popupText"></p>
+    <button onclick="closePopup()">ตกลง</button>
+  </div>
 </div>
 
 <script>
-const SECRET_CODE = "1234"; // 🔥 เปลี่ยนรหัสตรงนี้
+const SECRET_CODE = "1234"; // 🔐 เปลี่ยนรหัสตรงนี้
 let input = "";
+let heartTimer = null;
 
 function openEnvelope(){
-  document.getElementById("envelopeBox").classList.add("hidden");
-  document.getElementById("lockBox").classList.remove("hidden");
+  document.getElementById("envelopeScreen").classList.add("hidden");
+  document.getElementById("pinScreen").classList.remove("hidden");
 }
 
 function press(n){
-  if(input.length < SECRET_CODE.length){
-    input += n;
-    update();
-  }
+  if(input.length >= SECRET_CODE.length) return;
+  input += n;
+  update();
 }
+
 function back(){
   input = input.slice(0,-1);
   update();
 }
+
 function update(){
   document.getElementById("display").textContent = "•".repeat(input.length);
 }
-function check(){
+
+function checkPin(){
   if(input === SECRET_CODE){
-    document.getElementById("lockBox").classList.add("hidden");
-    document.getElementById("loveBox").classList.remove("hidden");
+    document.getElementById("pinScreen").classList.add("hidden");
+    document.getElementById("loveScreen").classList.remove("hidden");
     startHearts();
   }else{
-    alert("รหัสไม่ถูกนะ 💔");
-    input="";
+    showPopup("รหัสไม่ถูกนะ 💔");
+    input = "";
     update();
   }
 }
 
-/* หัวใจลอย */
+function showPopup(text){
+  document.getElementById("popupText").textContent = text;
+  document.getElementById("popup").classList.remove("hidden");
+}
+
+function closePopup(){
+  document.getElementById("popup").classList.add("hidden");
+}
+
+/* ❤️ หัวใจลอย */
 function startHearts(){
-  setInterval(()=>{
+  if(heartTimer) return;
+  heartTimer = setInterval(()=>{
     const h=document.createElement("div");
     h.className="heart";
     h.textContent="❤️";
     h.style.left=Math.random()*100+"vw";
-    h.style.fontSize=16+Math.random()*20+"px";
+    h.style.fontSize=18+Math.random()*20+"px";
     document.body.appendChild(h);
-    setTimeout(()=>h.remove(),5000);
+    setTimeout(()=>h.remove(),4000);
   },300);
 }
 </script>
