@@ -2,31 +2,57 @@
 <html lang="th">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport"
+      content="width=device-width,
+               initial-scale=1.0,
+               maximum-scale=1.0,
+               user-scalable=no,
+               viewport-fit=cover">
 <title>For You ❤️</title>
 
 <style>
+/* ================= SAFE AREA ROOT ================= */
+:root{
+    --safe-top: env(safe-area-inset-top, constant(safe-area-inset-top));
+    --safe-bottom: env(safe-area-inset-bottom, constant(safe-area-inset-bottom));
+    --safe-left: env(safe-area-inset-left, constant(safe-area-inset-left));
+    --safe-right: env(safe-area-inset-right, constant(safe-area-inset-right));
+}
+
+/* ================= RESET ================= */
 *{box-sizing:border-box}
-body{
-    margin:0;
+html,body{
     width:100%;
-    height:100dvh;
+    height:100%;
+    margin:0;
+}
+
+/* ================= BODY ================= */
+body{
+    min-height:100dvh;
+    min-height:-webkit-fill-available;
     font-family:Arial,sans-serif;
     background:linear-gradient(135deg,#ff9a9e,#fad0c4);
     display:flex;
     justify-content:center;
     align-items:center;
     overflow:hidden;
+
+    padding:
+        var(--safe-top)
+        var(--safe-right)
+        var(--safe-bottom)
+        var(--safe-left);
 }
 
-/* ===== ซ่อนแบบปลอดภัย ===== */
+/* ================= HIDDEN ================= */
 .hidden{
     display:none;
-    pointer-events:none;
     opacity:0;
+    pointer-events:none;
 }
 
-/* ===== กล่องกลาง ===== */
+/* ================= CARD BOX ================= */
 .box{
     background:white;
     padding:25px;
@@ -36,18 +62,19 @@ body{
     text-align:center;
     box-shadow:0 20px 40px rgba(0,0,0,.25);
     position:relative;
-    z-index:2; /* อยู่เหนือซอง */
+    z-index:2;
+    margin-bottom:calc(var(--safe-bottom) + 10px);
 }
 
-/* ===== หน้าเปิดซอง ===== */
+/* ================= ENVELOPE SCREEN ================= */
 .envelope-screen{
-    position:absolute;
+    position:fixed;
     inset:0;
     display:flex;
     flex-direction:column;
     justify-content:center;
     align-items:center;
-    z-index:1; /* ใต้ keypad */
+    z-index:1;
     transition:opacity .5s ease;
 }
 .big-envelope{
@@ -75,14 +102,18 @@ body{
 }
 @keyframes bounce{
     0%,100%{transform:translateY(0)}
-    50%{transform:translateY(-10px)}
+    50%{transform:translateY(-12px)}
 }
-.hint{color:white;margin-top:15px}
+.hint{
+    margin-top:15px;
+    color:white;
+    font-size:16px;
+}
 
-/* ===== ซองเล็ก ===== */
+/* ================= MINI ENVELOPE ================= */
 .mini-envelope{
     font-size:48px;
-    margin:10px auto 5px;
+    margin:10px auto;
     animation:float 2s ease-in-out infinite;
 }
 @keyframes float{
@@ -90,7 +121,7 @@ body{
     50%{transform:translateY(-8px)}
 }
 
-/* ===== คีย์แพด ===== */
+/* ================= KEYPAD ================= */
 .display{
     font-size:28px;
     letter-spacing:10px;
@@ -110,9 +141,9 @@ button{
     color:white;
     cursor:pointer;
 }
-button:hover{transform:scale(1.05)}
+button:active{transform:scale(.95)}
 
-/* ===== Gallery ===== */
+/* ================= GALLERY ================= */
 .gallery{
     position:relative;
     width:260px;
@@ -142,7 +173,7 @@ button:hover{transform:scale(1.05)}
     font-size:18px;
 }
 
-/* ===== ปุ่มหัวใจ ===== */
+/* ================= HEART BUTTON ================= */
 .heart-btn{
     margin-top:20px;
     padding:15px 25px;
@@ -153,6 +184,8 @@ button:hover{transform:scale(1.05)}
     color:white;
     box-shadow:0 10px 25px rgba(255,77,109,.5);
 }
+
+/* ================= FINAL TEXT ================= */
 .final{
     margin-top:20px;
     font-size:22px;
@@ -164,24 +197,24 @@ button:hover{transform:scale(1.05)}
     to{transform:scale(1);opacity:1}
 }
 
-/* ===== หัวใจลอย ===== */
+/* ================= FLOATING HEARTS ================= */
 .heart{
     position:fixed;
-    bottom:0;
+    bottom:var(--safe-bottom);
     font-size:22px;
     color:#ff4d6d;
     animation:floatUp 4s linear forwards;
 }
 @keyframes floatUp{
     from{transform:translateY(0);opacity:1}
-    to{transform:translateY(-100vh);opacity:0}
+    to{transform:translateY(-120vh);opacity:0}
 }
 </style>
 </head>
 
 <body>
 
-<!-- ✉️ หน้าเปิดซอง -->
+<!-- ✉️ OPEN ENVELOPE -->
 <div class="envelope-screen" id="envelopeScreen">
     <div class="big-envelope" onclick="openEnvelope()">
         <div class="big-letter">💌</div>
@@ -189,7 +222,7 @@ button:hover{transform:scale(1.05)}
     <div class="hint">แตะซองจดหมายเพื่อเปิด</div>
 </div>
 
-<!-- 🔐 หน้าใส่รหัส -->
+<!-- 🔐 LOCK -->
 <div class="box hidden" id="lock">
     <h2>ใส่รหัสหัวใจ 💕</h2>
     <div class="mini-envelope">💌</div>
@@ -211,7 +244,7 @@ button:hover{transform:scale(1.05)}
     </div>
 </div>
 
-<!-- 💖 หน้าเซอร์ไพรส์ -->
+<!-- 💖 LOVE -->
 <div class="box hidden" id="love">
     <h2>Happy Valentine 💖</h2>
 
