@@ -30,16 +30,15 @@ body{
   box-shadow:0 20px 40px rgba(0,0,0,.25);
 }
 
-/* ===== ซองจดหมาย ===== */
+/* ===== ซอง ===== */
 .envelope{
   font-size:100px;
   cursor:pointer;
+  transition:transform .6s ease, opacity .6s ease;
 }
 .envelope.open{
-  animation:openMail 1s forwards;
-}
-@keyframes openMail{
-  to{transform:scale(.7);opacity:0;}
+  transform:scale(.6) translateY(-40px);
+  opacity:0;
 }
 
 button{
@@ -82,7 +81,7 @@ button{
   position:fixed;
   bottom:-20px;
   font-size:20px;
-  animation:floatUp 4s linear infinite;
+  animation:floatUp 4s linear forwards;
 }
 @keyframes floatUp{
   to{transform:translateY(-110vh);opacity:0;}
@@ -92,14 +91,14 @@ button{
 
 <body>
 
-<!-- ===== หน้าเปิดซอง ===== -->
+<!-- หน้าเปิดซอง -->
 <div id="envelopeScreen" class="box">
   <h2>เปิดซองจดหมาย 💌</h2>
-  <div class="envelope" id="envelope">💌</div>
+  <div class="envelope" id="envelope" onclick="openEnvelope()">💌</div>
   <button onclick="openEnvelope()">เปิดซอง</button>
 </div>
 
-<!-- ===== หน้าใส่รหัส ===== -->
+<!-- หน้าใส่รหัส -->
 <div id="keypadScreen" class="box hidden">
   <h2>ใส่รหัสหัวใจ ❤️</h2>
   <div class="display" id="display">••••</div>
@@ -119,23 +118,14 @@ button{
   </div>
 </div>
 
-<!-- ===== หน้าเซอร์ไพรส์ ===== -->
+<!-- หน้าเซอร์ไพรส์ -->
 <div id="surpriseScreen" class="box hidden">
   <h2>เซอร์ไพรส์ 💖</h2>
-
   <div class="gallery">
     <img src="img1.jpg">
     <img src="img2.jpg">
     <img src="img3.jpg">
-    <img src="img4.jpg">
-    <img src="img5.jpg">
-    <img src="img6.jpg">
-    <img src="img7.jpg">
-    <img src="img8.jpg">
-    <img src="img9.jpg">
-    <img src="img10.jpg">
   </div>
-
   <h2>รักนะครับ ❤️</h2>
   <button onclick="finalHeart()">💍 กดหัวใจ</button>
 </div>
@@ -143,36 +133,41 @@ button{
 <audio id="bgm" src="music.mp3" loop></audio>
 
 <script>
-const CORRECT_PIN = "1234"; // <<< เปลี่ยนรหัสตรงนี้
+const CORRECT_PIN = "1234"; // 🔐 เปลี่ยนรหัสตรงนี้
 let input = "";
+let opened = false;
 
 function openEnvelope(){
+  if(opened) return;
+  opened = true;
+
   const env = document.getElementById("envelope");
   env.classList.add("open");
 
-  env.addEventListener("animationend",()=>{
+  // ✅ ใช้ timeout แทน animationend (ไม่ค้างแน่นอน)
+  setTimeout(()=>{
     document.getElementById("envelopeScreen").style.display="none";
     document.getElementById("keypadScreen").classList.remove("hidden");
-  },{once:true});
+  },650);
 }
 
 function press(n){
   if(input.length>=4) return;
-  input+=n;
+  input += n;
   updateDisplay();
 }
 
 function clearPin(){
-  input=input.slice(0,-1);
+  input = input.slice(0,-1);
   updateDisplay();
 }
 
 function updateDisplay(){
-  document.getElementById("display").textContent="•".repeat(input.length);
+  document.getElementById("display").textContent = "•".repeat(input.length);
 }
 
 function checkPin(){
-  if(input===CORRECT_PIN){
+  if(input === CORRECT_PIN){
     document.getElementById("keypadScreen").style.display="none";
     document.getElementById("surpriseScreen").classList.remove("hidden");
     document.getElementById("bgm").play();
