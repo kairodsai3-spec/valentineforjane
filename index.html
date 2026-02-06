@@ -6,260 +6,198 @@
 <title>For You ❤️</title>
 
 <style>
-*{box-sizing:border-box}
+*{box-sizing:border-box;}
 body{
-    margin:0;
-    height:100dvh;
-    font-family:Arial,sans-serif;
-    background:linear-gradient(135deg,#ff9a9e,#fad0c4);
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    overflow:hidden;
+  margin:0;
+  height:100vh;
+  font-family:Arial, sans-serif;
+  background:linear-gradient(135deg,#ff9a9e,#fad0c4);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  overflow:hidden;
 }
-.hidden{display:none}
 
-/* ===== กล่องกลาง ===== */
+.hidden{display:none;}
+
 .box{
-    background:white;
-    padding:25px;
-    border-radius:25px;
-    width:90%;
-    max-width:360px;
-    text-align:center;
-    box-shadow:0 20px 40px rgba(0,0,0,.25);
+  background:white;
+  width:90%;
+  max-width:360px;
+  padding:25px;
+  border-radius:25px;
+  text-align:center;
+  box-shadow:0 20px 40px rgba(0,0,0,.25);
 }
 
-/* ===== ซองเปิด ===== */
-.envelope-wrap{
-    perspective:800px;
-}
+/* ===== ซองจดหมาย ===== */
 .envelope{
-    width:200px;
-    height:130px;
-    margin:0 auto;
-    position:relative;
-    cursor:pointer;
+  font-size:100px;
+  cursor:pointer;
 }
-.envelope .back{
-    position:absolute;
-    inset:0;
-    background:#ff4d6d;
-    border-radius:15px;
+.envelope.open{
+  animation:openMail 1s forwards;
 }
-.envelope .flap{
-    position:absolute;
-    top:0;
-    left:0;
-    width:100%;
-    height:50%;
-    background:#ff758f;
-    clip-path:polygon(0 0,50% 100%,100% 0);
-    transform-origin:top;
-    transition:transform 1s ease;
-}
-.envelope.open .flap{
-    transform:rotateX(-180deg);
-}
-.envelope .heart{
-    position:absolute;
-    top:35%;
-    left:50%;
-    transform:translateX(-50%);
-    font-size:32px;
+@keyframes openMail{
+  to{transform:scale(.7);opacity:0;}
 }
 
-/* ===== คีย์แพด ===== */
+button{
+  margin-top:20px;
+  padding:12px 20px;
+  border:none;
+  border-radius:20px;
+  background:#ff5e78;
+  color:white;
+  font-size:16px;
+  cursor:pointer;
+}
+
+/* ===== keypad ===== */
 .display{
-    font-size:28px;
-    letter-spacing:10px;
-    margin:15px 0;
+  font-size:22px;
+  letter-spacing:6px;
+  margin-bottom:15px;
 }
 .keypad{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:10px;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
 }
-button{
-    padding:15px;
-    font-size:18px;
-    border:none;
-    border-radius:15px;
-    background:#ff4d6d;
-    color:white;
+.keypad button{
+  padding:15px;
+  font-size:18px;
+  border-radius:15px;
 }
-button:active{transform:scale(.95)}
 
-/* ===== Gallery ===== */
-.gallery{
-    width:260px;
-    height:260px;
-    margin:15px auto;
-    position:relative;
-    border-radius:20px;
-    overflow:hidden;
-}
-.slide{
-    position:absolute;
-    inset:0;
-    width:100%;
-    height:100%;
-    object-fit:cover;
-    opacity:0;
-    transition:1.5s;
-}
-.slide.active{opacity:1}
-
-/* ===== ปุ่มหัวใจ ===== */
-.heart-btn{
-    margin-top:20px;
-    padding:15px 25px;
-    font-size:20px;
-    border-radius:30px;
-    border:none;
-    background:#ff4d6d;
-    color:white;
-}
-.final{
-    margin-top:15px;
-    font-size:22px;
-    color:#ff4d6d;
+/* ===== รูป ===== */
+.gallery img{
+  width:100%;
+  border-radius:15px;
+  margin-bottom:10px;
 }
 
 /* ===== หัวใจลอย ===== */
-.floating-heart{
-    position:fixed;
-    bottom:-20px;
-    font-size:22px;
-    animation:floatUp 4s linear forwards;
+.heart{
+  position:fixed;
+  bottom:-20px;
+  font-size:20px;
+  animation:floatUp 4s linear infinite;
 }
 @keyframes floatUp{
-    from{transform:translateY(0);opacity:1}
-    to{transform:translateY(-110vh);opacity:0}
+  to{transform:translateY(-110vh);opacity:0;}
 }
 </style>
 </head>
 
 <body>
 
-<!-- 1️⃣ หน้าเปิดซอง -->
-<div class="box" id="page-envelope">
-    <h2>มีอะไรให้ 💌</h2>
-
-    <div class="envelope-wrap">
-        <div class="envelope" id="env" onclick="openEnvelope()">
-            <div class="back"></div>
-            <div class="flap"></div>
-            <div class="heart">❤️</div>
-        </div>
-    </div>
-
-    <p>แตะเพื่อเปิดซอง</p>
+<!-- ===== หน้าเปิดซอง ===== -->
+<div id="envelopeScreen" class="box">
+  <h2>เปิดซองจดหมาย 💌</h2>
+  <div class="envelope" id="envelope">💌</div>
+  <button onclick="openEnvelope()">เปิดซอง</button>
 </div>
 
-<!-- 2️⃣ หน้าใส่รหัส -->
-<div class="box hidden" id="page-lock">
-    <h2>ใส่รหัสหัวใจ 💕</h2>
-    <div class="display" id="display">____</div>
-
-    <div class="keypad">
-        <button onclick="press(1)">1</button>
-        <button onclick="press(2)">2</button>
-        <button onclick="press(3)">3</button>
-        <button onclick="press(4)">4</button>
-        <button onclick="press(5)">5</button>
-        <button onclick="press(6)">6</button>
-        <button onclick="press(7)">7</button>
-        <button onclick="press(8)">8</button>
-        <button onclick="press(9)">9</button>
-        <button onclick="del()">⌫</button>
-        <button onclick="press(0)">0</button>
-        <button onclick="check()">OK</button>
-    </div>
+<!-- ===== หน้าใส่รหัส ===== -->
+<div id="keypadScreen" class="box hidden">
+  <h2>ใส่รหัสหัวใจ ❤️</h2>
+  <div class="display" id="display">••••</div>
+  <div class="keypad">
+    <button onclick="press(1)">1</button>
+    <button onclick="press(2)">2</button>
+    <button onclick="press(3)">3</button>
+    <button onclick="press(4)">4</button>
+    <button onclick="press(5)">5</button>
+    <button onclick="press(6)">6</button>
+    <button onclick="press(7)">7</button>
+    <button onclick="press(8)">8</button>
+    <button onclick="press(9)">9</button>
+    <button onclick="clearPin()">⌫</button>
+    <button onclick="press(0)">0</button>
+    <button onclick="checkPin()">OK</button>
+  </div>
 </div>
 
-<!-- 3️⃣ หน้าเซอร์ไพรส์ -->
-<div class="box hidden" id="page-love">
-    <h2>Happy Valentine 💖</h2>
+<!-- ===== หน้าเซอร์ไพรส์ ===== -->
+<div id="surpriseScreen" class="box hidden">
+  <h2>เซอร์ไพรส์ 💖</h2>
 
-    <div class="gallery">
-        <img src="img1.jpg" class="slide active">
-        <img src="img2.jpg" class="slide">
-        <img src="img3.jpg" class="slide">
-        <img src="img4.jpg" class="slide">
-        <img src="img5.jpg" class="slide">
-        <img src="img6.jpg" class="slide">
-        <img src="img7.jpg" class="slide">
-        <img src="img8.jpg" class="slide">
-        <img src="img9.jpg" class="slide">
-        <img src="img10.jpg" class="slide">
-    </div>
+  <div class="gallery">
+    <img src="img1.jpg">
+    <img src="img2.jpg">
+    <img src="img3.jpg">
+    <img src="img4.jpg">
+    <img src="img5.jpg">
+    <img src="img6.jpg">
+    <img src="img7.jpg">
+    <img src="img8.jpg">
+    <img src="img9.jpg">
+    <img src="img10.jpg">
+  </div>
 
-    <button class="heart-btn" onclick="finalLove()">❤️ รักนะครับ ❤️</button>
-    <div class="final hidden" id="final">
-        💍 รักเธอมากนะ ขอบคุณที่อยู่ด้วยกันเสมอ ❤️
-    </div>
+  <h2>รักนะครับ ❤️</h2>
+  <button onclick="finalHeart()">💍 กดหัวใจ</button>
 </div>
 
-<audio id="music" src="song.mp3" loop></audio>
+<audio id="bgm" src="music.mp3" loop></audio>
 
 <script>
-const password="1402";
-let input="";
-let index=0;
-const slides=document.querySelectorAll(".slide");
+const CORRECT_PIN = "1234"; // <<< เปลี่ยนรหัสตรงนี้
+let input = "";
 
 function openEnvelope(){
-    env.classList.add("open");
-    setTimeout(()=>{
-        page-envelope.classList.add("hidden");
-        page-lock.classList.remove("hidden");
-    },900);
+  const env = document.getElementById("envelope");
+  env.classList.add("open");
+
+  env.addEventListener("animationend",()=>{
+    document.getElementById("envelopeScreen").style.display="none";
+    document.getElementById("keypadScreen").classList.remove("hidden");
+  },{once:true});
 }
 
 function press(n){
-    if(input.length<4){input+=n;update()}
-}
-function del(){
-    input=input.slice(0,-1);update()
-}
-function update(){
-    display.textContent=input.padEnd(4,"_");
-}
-function check(){
-    if(input===password){
-        page-lock.classList.add("hidden");
-        page-love.classList.remove("hidden");
-        music.play();
-        startSlide();
-        floatingHearts();
-    }else{
-        input="";update();
-        alert("รหัสไม่ถูกนะ 😳");
-    }
+  if(input.length>=4) return;
+  input+=n;
+  updateDisplay();
 }
 
-function startSlide(){
-    setInterval(()=>{
-        slides[index].classList.remove("active");
-        index=(index+1)%slides.length;
-        slides[index].classList.add("active");
-    },3000);
+function clearPin(){
+  input=input.slice(0,-1);
+  updateDisplay();
 }
 
-function floatingHearts(){
-    setInterval(()=>{
-        const h=document.createElement("div");
-        h.className="floating-heart";
-        h.innerHTML="❤️";
-        h.style.left=Math.random()*100+"vw";
-        document.body.appendChild(h);
-        setTimeout(()=>h.remove(),4000);
-    },400);
+function updateDisplay(){
+  document.getElementById("display").textContent="•".repeat(input.length);
 }
 
-function finalLove(){
-    final.classList.remove("hidden");
+function checkPin(){
+  if(input===CORRECT_PIN){
+    document.getElementById("keypadScreen").style.display="none";
+    document.getElementById("surpriseScreen").classList.remove("hidden");
+    document.getElementById("bgm").play();
+    startHearts();
+  }else{
+    alert("รหัสไม่ถูกนะ 💔");
+    input="";
+    updateDisplay();
+  }
+}
+
+function startHearts(){
+  setInterval(()=>{
+    const h=document.createElement("div");
+    h.className="heart";
+    h.textContent="❤️";
+    h.style.left=Math.random()*100+"vw";
+    h.style.fontSize=20+Math.random()*20+"px";
+    document.body.appendChild(h);
+    setTimeout(()=>h.remove(),4000);
+  },300);
+}
+
+function finalHeart(){
+  alert("รักนะครับ ❤️💍");
 }
 </script>
 
