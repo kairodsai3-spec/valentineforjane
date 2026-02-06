@@ -2,206 +2,283 @@
 <html lang="th">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>For You ❤️</title>
 
 <style>
 *{box-sizing:border-box}
 body{
-  margin:0;
-  height:100vh;
-  font-family:Arial,sans-serif;
-  background:linear-gradient(135deg,#ff9a9e,#fad0c4);
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  overflow:hidden;
+    margin:0;
+    width:100%;
+    height:100dvh;
+    font-family: Arial, sans-serif;
+    background:linear-gradient(135deg,#ff9a9e,#fad0c4);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    overflow:hidden;
 }
-
-/* กล่องกลาง */
-.box{
-  background:#fff;
-  padding:25px;
-  border-radius:25px;
-  width:90%;
-  max-width:360px;
-  text-align:center;
-  box-shadow:0 20px 40px rgba(0,0,0,.25);
-}
-
 .hidden{display:none}
 
-/* ===== ซอง ===== */
+/* ===== ซองจดหมาย ===== */
+.envelope-screen{
+    position:absolute;
+    inset:0;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+}
 .envelope{
-  font-size:90px;
-  cursor:pointer;
-  animation:bounce 1.2s infinite;
+    width:180px;
+    height:120px;
+    background:#ff4d6d;
+    border-radius:15px;
+    position:relative;
+    cursor:pointer;
+    animation:bounce 2s infinite;
+}
+.envelope::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:#ff758f;
+    clip-path:polygon(0 0,50% 50%,100% 0,100% 100%,0 100%);
+}
+.letter{
+    position:absolute;
+    top:-25px;
+    left:50%;
+    transform:translateX(-50%);
+    font-size:36px;
 }
 @keyframes bounce{
-  0%,100%{transform:translateY(0)}
-  50%{transform:translateY(-10px)}
+    0%,100%{transform:translateY(0)}
+    50%{transform:translateY(-10px)}
+}
+.hint{color:white;margin-top:15px}
+
+/* ===== กล่องกลาง ===== */
+.box{
+    background:white;
+    padding:25px;
+    border-radius:25px;
+    width:90%;
+    max-width:360px;
+    text-align:center;
+    box-shadow:0 20px 40px rgba(0,0,0,.25);
 }
 
-button{
-  margin-top:15px;
-  padding:12px 22px;
-  border:none;
-  border-radius:20px;
-  background:#ff5e78;
-  color:#fff;
-  font-size:16px;
-}
-
-/* ===== keypad ===== */
+/* ===== คีย์แพด ===== */
 .display{
-  font-size:24px;
-  letter-spacing:8px;
-  margin:12px 0;
+    font-size:28px;
+    letter-spacing:10px;
+    margin:15px 0;
 }
 .keypad{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:10px;
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:10px;
 }
-.keypad button{
-  padding:15px;
-  font-size:18px;
-  border-radius:14px;
-  background:#ff6f91;
+button{
+    padding:15px;
+    font-size:18px;
+    border:none;
+    border-radius:15px;
+    background:#ff4d6d;
+    color:white;
+    cursor:pointer;
+}
+button:hover{transform:scale(1.05)}
+
+/* ===== Gallery ===== */
+.gallery{
+    position:relative;
+    width:260px;
+    height:260px;
+    margin:15px auto;
+    border-radius:20px;
+    overflow:hidden;
+    box-shadow:0 15px 30px rgba(255,77,109,.4);
+}
+.slide{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    opacity:0;
+    transform:scale(1.1);
+    transition:1.5s;
+}
+.slide.active{
+    opacity:1;
+    transform:scale(1);
+}
+.text-love{
+    margin-top:10px;
+    color:#ff4d6d;
+    font-size:18px;
 }
 
-/* ===== popup ===== */
-.popup{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.4);
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  z-index:10;
+/* ===== ปุ่มหัวใจ ===== */
+.heart-btn{
+    margin-top:20px;
+    padding:15px 25px;
+    font-size:20px;
+    border-radius:30px;
+    border:none;
+    background:linear-gradient(135deg,#ff4d6d,#ff85a1);
+    color:white;
+    box-shadow:0 10px 25px rgba(255,77,109,.5);
 }
-.popup-box{
-  background:#fff;
-  padding:25px;
-  border-radius:22px;
-  width:80%;
-  text-align:center;
+.final{
+    margin-top:20px;
+    font-size:22px;
+    color:#ff4d6d;
+    animation:pop .6s ease;
+}
+@keyframes pop{
+    from{transform:scale(.5);opacity:0}
+    to{transform:scale(1);opacity:1}
 }
 
 /* ===== หัวใจลอย ===== */
 .heart{
-  position:fixed;
-  bottom:-20px;
-  font-size:20px;
-  animation:floatUp 4s linear forwards;
+    position:fixed;
+    bottom:0;
+    font-size:22px;
+    color:#ff4d6d;
+    animation:floatUp 4s linear forwards;
 }
 @keyframes floatUp{
-  to{transform:translateY(-120vh);opacity:0}
+    from{transform:translateY(0);opacity:1}
+    to{transform:translateY(-100vh);opacity:0}
 }
 </style>
 </head>
 
 <body>
 
-<!-- หน้าเปิดซอง -->
-<div class="box" id="envelopeScreen">
-  <h2>มีอะไรจะบอก 💌</h2>
-  <div class="envelope" onclick="openEnvelope()">💌</div>
-  <button onclick="openEnvelope()">เปิดซอง</button>
+<!-- ✉️ เปิดซอง -->
+<div class="envelope-screen" id="envelope">
+    <div class="envelope" onclick="openEnvelope()">
+        <div class="letter">💌</div>
+    </div>
+    <div class="hint">แตะซองจดหมายเพื่อเปิด</div>
 </div>
 
-<!-- หน้าใส่รหัส -->
-<div class="box hidden" id="pinScreen">
-  <h2>ใส่รหัสหัวใจ ❤️</h2>
-  <div class="display" id="display"></div>
-  <div class="keypad">
-    <button onclick="press(1)">1</button>
-    <button onclick="press(2)">2</button>
-    <button onclick="press(3)">3</button>
-    <button onclick="press(4)">4</button>
-    <button onclick="press(5)">5</button>
-    <button onclick="press(6)">6</button>
-    <button onclick="press(7)">7</button>
-    <button onclick="press(8)">8</button>
-    <button onclick="press(9)">9</button>
-    <button onclick="back()">⌫</button>
-    <button onclick="press(0)">0</button>
-    <button onclick="checkPin()">OK</button>
-  </div>
+<!-- 🔐 ใส่รหัส -->
+<div class="box hidden" id="lock">
+    <h2>ใส่รหัสหัวใจ 💕</h2>
+    <div class="display" id="display">____</div>
+    <div class="keypad">
+        <button onclick="press(1)">1</button>
+        <button onclick="press(2)">2</button>
+        <button onclick="press(3)">3</button>
+        <button onclick="press(4)">4</button>
+        <button onclick="press(5)">5</button>
+        <button onclick="press(6)">6</button>
+        <button onclick="press(7)">7</button>
+        <button onclick="press(8)">8</button>
+        <button onclick="press(9)">9</button>
+        <button onclick="del()">⌫</button>
+        <button onclick="press(0)">0</button>
+        <button onclick="check()">OK</button>
+    </div>
 </div>
 
-<!-- หน้าเซอร์ไพรส์ -->
-<div class="box hidden" id="loveScreen">
-  <h1>รักนะ ❤️</h1>
-  <p>ขอบคุณที่อยู่ด้วยกันเสมอ</p>
+<!-- 💖 เซอร์ไพรส์ -->
+<div class="box hidden" id="love">
+    <h2>Happy Valentine 💖</h2>
+
+    <div class="gallery">
+        <img src="img1.jpg" class="slide active">
+        <img src="img2.jpg" class="slide">
+        <img src="img3.jpg" class="slide">
+        <img src="img4.jpg" class="slide">
+        <img src="img5.jpg" class="slide">
+        <img src="img6.jpg" class="slide">
+        <img src="img7.jpg" class="slide">
+        <img src="img8.jpg" class="slide">
+        <img src="img9.jpg" class="slide">
+        <img src="img10.jpg" class="slide">
+    </div>
+
+    <div class="text-love" id="text"></div>
+
+    <button class="heart-btn" onclick="finalLove()">❤️ รักนะครับ ❤️</button>
+    <div id="final" class="final hidden">
+        💍 รักเธอมากนะ<br>ขอบคุณที่อยู่ด้วยกันเสมอ ❤️
+    </div>
 </div>
 
-<!-- popup แจ้งเตือน -->
-<div class="popup hidden" id="popup">
-  <div class="popup-box">
-    <p id="popupText"></p>
-    <button onclick="closePopup()">ตกลง</button>
-  </div>
-</div>
+<audio id="music" src="song.mp3" loop></audio>
 
 <script>
-const SECRET_CODE = "1234"; // 🔐 เปลี่ยนรหัสตรงนี้
-let input = "";
-let heartTimer = null;
+const password="1402"; // เปลี่ยนรหัสตรงนี้
+let input="";
+const slides=document.querySelectorAll(".slide");
+const texts=[
+"วันแรกที่เราเจอกัน ❤️",
+"โมเมนต์ที่ไม่เคยลืม",
+"ยิ้มแบบนี้ใจละลาย",
+"ขอบคุณที่อยู่ข้างกัน",
+"รักเธอมากขึ้นทุกวัน",
+"อยากมีเธอในทุกวัน",
+"ความทรงจำของเรา",
+"อยู่ด้วยกันแบบนี้",
+"จับมือกันไปนานๆ",
+"รักนะครับ 💕"
+];
+let index=0;
 
 function openEnvelope(){
-  document.getElementById("envelopeScreen").classList.add("hidden");
-  document.getElementById("pinScreen").classList.remove("hidden");
+    envelope.classList.add("hidden");
+    lock.classList.remove("hidden");
 }
-
 function press(n){
-  if(input.length >= SECRET_CODE.length) return;
-  input += n;
-  update();
+    if(input.length<4){input+=n;update()}
 }
-
-function back(){
-  input = input.slice(0,-1);
-  update();
+function del(){
+    input=input.slice(0,-1);update()
 }
-
 function update(){
-  document.getElementById("display").textContent = "•".repeat(input.length);
+    display.textContent=input.padEnd(4,"_")
 }
-
-function checkPin(){
-  if(input === SECRET_CODE){
-    document.getElementById("pinScreen").classList.add("hidden");
-    document.getElementById("loveScreen").classList.remove("hidden");
-    startHearts();
-  }else{
-    showPopup("รหัสไม่ถูกนะ 💔");
-    input = "";
-    update();
-  }
+function check(){
+    if(input===password){
+        lock.classList.add("hidden");
+        love.classList.remove("hidden");
+        music.play();
+        startSlide();
+        hearts();
+    }else{
+        alert("รหัสไม่ถูกนะ 😳");
+        input="";update();
+    }
 }
-
-function showPopup(text){
-  document.getElementById("popupText").textContent = text;
-  document.getElementById("popup").classList.remove("hidden");
+function startSlide(){
+    text.textContent=texts[0];
+    setInterval(()=>{
+        slides[index].classList.remove("active");
+        index=(index+1)%slides.length;
+        slides[index].classList.add("active");
+        text.textContent=texts[index];
+    },3000);
 }
-
-function closePopup(){
-  document.getElementById("popup").classList.add("hidden");
+function hearts(){
+    setInterval(()=>{
+        const h=document.createElement("div");
+        h.className="heart";
+        h.innerHTML="❤️";
+        h.style.left=Math.random()*100+"vw";
+        document.body.appendChild(h);
+        setTimeout(()=>h.remove(),4000);
+    },500);
 }
-
-/* ❤️ หัวใจลอย */
-function startHearts(){
-  if(heartTimer) return;
-  heartTimer = setInterval(()=>{
-    const h=document.createElement("div");
-    h.className="heart";
-    h.textContent="❤️";
-    h.style.left=Math.random()*100+"vw";
-    h.style.fontSize=18+Math.random()*20+"px";
-    document.body.appendChild(h);
-    setTimeout(()=>h.remove(),4000);
-  },300);
+function finalLove(){
+    final.classList.remove("hidden");
 }
 </script>
 
